@@ -1,0 +1,100 @@
+<!doctype html>
+
+<html>
+	<head>
+		<title>tryit-jssip</title>
+		<meta charset='UTF-8'>
+		<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'>
+		<link rel='stylesheet' href='videosession.css'>
+		<script>
+			// Set debug
+			window.localStorage.setItem('debug', '* -engine* -socket* *ERROR* *WARN*');
+		</script>
+
+
+		<script>
+
+			// Uncomment and fill the SETTINGS object in order to use hardcoded settings
+			//
+			// You don't need to set display_name nor uri, they can be set via HTTP form in
+			// the Login section of the web
+			//
+			// window.SETTINGS =
+			// {
+			// 	display_name        : null,
+			// 	uri                 : null,
+			// 	password            : null,
+			// 	socket              :
+			// 	{
+			// 		uri           : 'wss://sip.yourdomain.com',
+			// 		via_transport : 'auto',
+			// 	},
+			// 	registrar_server    : null,
+			// 	contact_uri         : null,
+			// 	authorization_user  : null,
+			// 	instance_id         : null,
+			// 	session_timers      : true,
+			// 	use_preloaded_route : false,
+			// 	pcConfig            :
+			// 	{
+			// 		rtcpMuxPolicy : 'negotiate',
+			// 		iceServers    :
+			// 		[
+			// 			{ urls : [ 'stun:stun.l.google.com:19302' ] }
+			// 		]
+			// 	},
+			// 	callstats           :
+			// 	{
+			// 		enabled   : false,
+			// 		AppID     : null,
+			// 		AppSecret : null
+			// 	}
+			// };
+		</script>
+
+		<script src='resources/js/jssip.js'></script>
+	</head>
+
+	<body>
+		<h1> under development </h1>
+		<div id='tryit-jssip-container'></div>
+		<div id='tryit-jssip-media-query-detector'></div>
+	</body>
+	<script type="text/javascript">
+			// Create our JsSIP instance and run it:
+
+			var socket = new JsSIP.WebSocketInterface('wss://sip.myhost.com');
+			var configuration = {
+			  sockets  : [ socket ],
+			  uri      : 'sip:alice@example.com',
+			  password : 'superpassword'
+			};
+
+			var ua = new JsSIP.UA(configuration);
+
+			ua.start();
+
+			// Register callbacks to desired call events
+			var eventHandlers = {
+			  'progress': function(e) {
+			    console.log('call is in progress');
+			  },
+			  'failed': function(e) {
+			    console.log('call failed with cause: '+ e.data.cause);
+			  },
+			  'ended': function(e) {
+			    console.log('call ended with cause: '+ e.data.cause);
+			  },
+			  'confirmed': function(e) {
+			    console.log('call confirmed');
+			  }
+			};
+
+			var options = {
+			  'eventHandlers'    : eventHandlers,
+			  'mediaConstraints' : { 'audio': true, 'video': true }
+			};
+
+			var session = ua.call('sip:bob@example.com', options);
+	</script>
+</html>
