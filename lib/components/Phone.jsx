@@ -308,17 +308,36 @@ export default class Phone extends React.Component
 		// Set callstats stuff
 		if (settings.callstats.enabled)
 		{
-			callstatsjssip(
+			const localUserID = "altanai";
+			callstats = new window.callstatsjssip();
+
+			//callstatsjssip(
 				// JsSIP.UA instance
-				this._ua,
-				// AppID
-				settings.callstats.AppID,
-				// AppSecret
-				// 'zAWooDtrYJPo:OeNNdLBBk7nOq9mCS5qbxOhuzt6IdCvnx3cjNGj2tBo='
-				settings.callstats.AppSecret
-			);
+			//	this._ua,
+			//	settings.callstats.AppID,
+			//	settings.callstats.AppSecret
+			//);
+
+			callstats.initialize(settings.callstats.AppID, settings.callstats.AppSecret, localUserID, csInitCallback, csStatsCallback, configParams);
+
+			const usage = callstats.fabricUsage.multiplex;
+  			const fabricAttributes = {
+    			remoteEndpointType:   callstats.endpointType.peer,
+    			fabricTransmissionDirection:  callstats.transmissionDirection.sendrecv
+    		};
+
+  			//remoteUserID is the recipient's userID
+  			const remoteUserID = "someone";
+  			//conferenceID is generated or provided by the origin server (webrtc service)
+  			callstats.addNewFabric(pcObject, remoteUserID, usage, conferenceID, fabricAttributes, pcCallback);
+
+
 		}
 	}
+
+ 	pcCallback (err, msg) {
+    	console.log("Monitoring status: "+ err + " msg: " + msg);
+  	}
 
 	componentWillUnmount()
 	{
@@ -361,12 +380,12 @@ export default class Phone extends React.Component
 				mediaConstraints :
 				{
 					audio : true,
-					video : true
+					video : false
 				},
 				rtcOfferConstraints :
 				{
 					offerToReceiveAudio : 1,
-					offerToReceiveVideo : 1
+					offerToReceiveVideo : 0
 				}
 			});
 
@@ -392,6 +411,8 @@ export default class Phone extends React.Component
 					title   : 'Call failed',
 					message : data.cause
 				});
+
+			//callstats.reportError(pcObject, conferenceID, callstats.webRTCFunctions.createOffer, err);
 		});
 
 		session.on('ended', () =>
