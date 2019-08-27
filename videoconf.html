@@ -74,6 +74,25 @@
 
 			ua.start();
 
+			// Call stats 
+			var AppID = "548881347";
+			var AppSecret = "uh2bBkcSCXJX:yMBcfVwrSYaTm40pG/T99lxI/TBeyqjRgQhIKuxEeF0=";
+
+			var callstats = new callstats();
+			callstats.initialize(AppID, AppSecret, localUserID, csInitCallback, csStatsCallback, configParams);
+			//callstatsjssip(ua, appID, appSecret);
+
+			var usage = callstats.fabricUsage.multiplex;
+			var fabricAttributes = {
+			    remoteEndpointType:   callstats.endpointType.peer,
+			    fabricTransmissionDirection:  callstats.transmissionDirection.sendrecv
+			};
+
+			//remoteUserID is the recipient's userID
+			//conferenceID is generated or provided by the origin server (webrtc service)
+			callstats.addNewFabric(pcObject, remoteUserID, usage, conferenceID, fabricAttributes, pcCallback);
+
+
 			// Register callbacks to desired call events
 			var eventHandlers = {
 			  'progress': function(e) {
@@ -96,5 +115,7 @@
 			};
 
 			var session = ua.call('sip:bob@example.com', options);
+
+
 	</script>
 </html>

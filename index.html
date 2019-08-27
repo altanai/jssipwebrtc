@@ -21,8 +21,8 @@
 			// window.antiglobal('___browserSync___oldSocketIo', 'JSON3', 'io', '___browserSync___', '__core-js_shared__', 'MediaStream', 'RTCPeerConnection', 'callstats', 'jssipCallstats');
 			// setInterval(window.antiglobal, 5000);
 		</script>
-<!-- 	<script src='https://api.callstats.io/static/callstats.min.js'></script>
-		<script src='https://api.callstats.io/static/callstats-jssip.min.js'></script> -->
+		<script src='https://api.callstats.io/static/callstats.min.js'></script>
+		<script src='https://api.callstats.io/static/callstats-jssip.min.js'></script>
 
 		<script>
 			// Uncomment and fill the SETTINGS object in order to use hardcoded settings
@@ -37,8 +37,8 @@
 				password            : null,
 				socket              :
 				{
-					uri           : 'wss://<kamailio_ip>:443', //'wss://tryit.jssip.net',
-					via_transport : 'auto',
+					uri           	: 'wss://tryit.jssip.net',
+					via_transport 	: 'auto',
 				},
 				registrar_server    : null,
 				contact_uri         : null,
@@ -56,9 +56,9 @@
 				},
 				callstats           :
 				{
-					enabled   : false,
-					AppID     : null,
-					AppSecret : null
+					enabled   : true,
+					AppID     : "548881347",
+					AppSecret : "uh2bBkcSCXJX:yMBcfVwrSYaTm40pG/T99lxI/TBeyqjRgQhIKuxEeF0="
 				}
 			};
 		</script>
@@ -74,4 +74,23 @@
 		<div id='tryit-jssip-container'></div>
 		<div id='tryit-jssip-media-query-detector'></div>
 	</body>
+
+	<script>
+			// Callstats.io 
+			var AppID = "548881347";
+			var AppSecret = "uh2bBkcSCXJX:yMBcfVwrSYaTm40pG/T99lxI/TBeyqjRgQhIKuxEeF0=";
+
+			var callstats = new callstats();
+			callstats.initialize(AppID, AppSecret, localUserID, csInitCallback, csStatsCallback, configParams);
+			//callstatsjssip(ua, appID, appSecret);
+
+			var usage = callstats.fabricUsage.multiplex;
+			var fabricAttributes = {
+			    remoteEndpointType:   callstats.endpointType.peer,
+			    fabricTransmissionDirection:  callstats.transmissionDirection.sendrecv
+			};
+
+			//remoteUserID is the recipient's userID
+			//conferenceID is generated or provided by the origin server (webrtc service)
+			callstats.addNewFabric(pcObject, remoteUserID, usage, conferenceID, fabricAttributes, pcCallback);
 </html>
