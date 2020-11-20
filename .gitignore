@@ -1,0 +1,9 @@
+/node_modules/
+/out
+/resources/js/callstats.*
+.DS_Store
+ca-key.pem
+ca.pem
+ca.srl
+cert.pem
+key.pem
